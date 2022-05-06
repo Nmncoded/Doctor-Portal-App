@@ -1,10 +1,10 @@
 import React, {useState,useEffect}from 'react'; 
-// import '../Stylesheets/signin-styles/signin.css';
+import { connect } from 'react-redux';
 import {Link,NavLink} from 'react-router-dom';
-// import url from './URL';
-// import { withRouter } from 'react-router-dom';
+import { updateLoginStatus } from '../store/action';
 
 function Signin(props) {
+    let {dispatch} = props;
     let [email,setEmail] = useState("");
     let [password,setPassword] = useState("");
     let [errors,setErrors] = useState({
@@ -21,60 +21,28 @@ function Signin(props) {
     }
     const handleInputChange = ({target}) => {
         const {name,value} = target;
-        // let errors = this.state.errors;
 
         switch(name){
-            case "email": errors.email  = validateEmail(value) ? "" : "Email is not valid"
+            case "email": setErrors({...errors, email: validateEmail(value) ? "" : "Email is not valid" })
                 break;
-            case "password": errors.password  = validatePassword(value) ? "" : "Minimum eight characters, at least one letter and one number"
+            case "password": setErrors({...errors, password : validatePassword(value) ? "" : "Minimum eight characters, at least one letter and one number" })
                 break;
             default:
                 break;
         }
-        setErrors(errors);
 
         if(name === "email"){
-            setEmail(email = value)
+            setEmail(value)
         }
         if(name === "password"){
-            setPassword(password = value)
+            setPassword(value)
         }
     }
     const handleInputSubmit = (event) => {
         event.preventDefault();
-        // fetch(url.signInUrl,{
-        //     method: 'POST',
-        //     headers:{
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         user:{
-        //         email,
-        //         password,
-        //         }
-        //     })
-        // }).then(res => {
-        //     if(!res.ok){
-        //         res.json().then(({errors}) => {
-        //             return Promise.reject(errors)
-        //         })
-        //     }else{
-        //         return res.json()
-        //     }
-        // })
-        // .then(({user}) => {
-        //     props.updateUser({
-        //         ...user,
-        //         password,
-        //     });
-        //     props.history.push('/');
-        // })
-        // .catch(errors => {
-        //     setErrors(errors = {
-        //         ...errors,
-        //         email: "email or password is invalid",
-        //     })
-        // })
+        dispatch(updateLoginStatus(true));
+        localStorage.setItem("status" , JSON.stringify(true));
+        props.history.push("/");
     }
         return (
             <section className='main-signin flex-center-center' >
@@ -93,4 +61,6 @@ function Signin(props) {
         )
 }
 
-export default Signin;
+const mapStateToProps = (state) => ({...state})
+
+export default connect(mapStateToProps)(Signin);

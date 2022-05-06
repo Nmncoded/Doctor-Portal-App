@@ -1,35 +1,9 @@
-import { USER_INFO,UPDATE_PATIENTS_DATA } from "./actionTypes"
+import { USER_INFO,UPDATE_PATIENTS_DATA, UPDATE_LOGIN_STATUS } from "./actionTypes"
 
 const initialState = {
   userInfo: null,
-  isLoggedin: true,
-  isVerifying: true,
-  allPatientsData : [
-    {
-      name : "naman Aggarwal",
-      age : 24,
-      email : "nmn.office@yahoo.com",
-      gender : "male",
-    },
-    {
-      name : "kushal dave",
-      age : 26,
-      email : "kushal.office@yahoo.com",
-      gender : "male",
-    },
-    {
-      name : "john horo",
-      age : 23,
-      email : "john.office@yahoo.com",
-      gender : "male",
-    },
-    {
-      name : "chandresh bhaiya",
-      age : 25,
-      email : "chand.office@yahoo.com",
-      gender : "male",
-    },
-  ]
+  isLoggedin: false,
+  allPatientsData : null,
 }
 
 const reducer = (state = initialState, action) => {
@@ -46,16 +20,16 @@ const reducer = (state = initialState, action) => {
         allPatientsData: action.payload
       }
     }
+    case UPDATE_LOGIN_STATUS : {
+      return {
+        ...state,
+        isLoggedin : action.payload,
+      }
+    }
     // case LOGOUT: {
     //   localStorage.clear();
     //   return {
     //     ...initialState
-    //   }
-    // }
-    // case UPDATE_LIKES : {
-    //   return {
-    //     ...state,
-    //     feeds : action.payload,
     //   }
     // }
     default: {

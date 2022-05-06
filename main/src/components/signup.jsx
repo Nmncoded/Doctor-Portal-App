@@ -1,10 +1,10 @@
 import React,{useState,useEffect} from 'react'; 
-// import '../Stylesheets/signup-styles/signup.css';
+import { connect } from 'react-redux';
 import {Link,NavLink} from 'react-router-dom';
-// import url from './URL'
-import { withRouter } from 'react-router-dom';
+import { updateLoginStatus } from '../store/action';
 
 function Signup(props) {
+    let { dispatch, isLoggedin } = props;
     let [email,setEmail] = useState("");
     let [password,setPassword] = useState("");
     let [username,setUsername] = useState("");
@@ -25,60 +25,32 @@ function Signup(props) {
         const {name,value} = target;
 
         switch(name){
-            case "email": errors.email  = validateEmail(value) ? "" : "Email is not valid"
+            case "email":  setErrors({...errors, email :  validateEmail(value) ? "" : "Email is not valid" })
                 break;
-            case "password": errors.password  = validatePassword(value) ? "" : "Minimum eight characters, at least one letter and one number"
+            case "password":  setErrors({...errors, password : validatePassword(value) ? "" : "Minimum eight characters, at least one letter and one number" })
                 break;
-            case "username": errors.username  = value.length >= 6 ? "" : "Username should be at-least 6 characters long"
+            case "username": setErrors({...errors, username : value.length >= 6 ? "" : "Username should be at-least 6 characters long" })
                 break;
             default:
                 break;
         }
-        setErrors(errors);
         if(name === "email"){
-            setEmail(email = value)
+            setEmail(value)
         }
         if(name === "password"){
-            setPassword(password = value)
+            setPassword(value)
         }
         if(name === "username"){
-            setUsername(username = value)
+            setUsername(value)
         }
     }
     const handleInputSubmit = (event) => {
         event.preventDefault();
-        // fetch(url.signUpUrl,{
-        //     method: 'POST',
-        //     headers:{
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         user:{
-        //         username,
-        //         email,
-        //         password,
-        //         }
-        //     })
-        // }).then(res => {
-        //     if(!res.ok){
-        //         return res.json().then(({errors}) => {
-        //             return Promise.reject(errors);
-        //         });
-        //     }else{
-        //         return res.json()
-        //     }
-        // })
-        // .then(({user}) => {
-        //     props.updateUser({
-        //         ...user,
-        //         password,
-        //     });
-        //     props.history.push('/');
-        // })
-        // .catch(errors => setErrors(errors = {
-        //     ...errors,
-        //     username: "Something went wrong. Please try after some time!!!",
-        // }))
+        dispatch(updateLoginStatus(true));
+        localStorage.setItem("status" , JSON.stringify(true));
+        props.history.push("/");
+
+
     }
         return (
             <section className='main-signup flex-center-center' >
@@ -99,4 +71,7 @@ function Signup(props) {
         )
 }
 
-export default Signup;
+
+const mapStateToProps = (state) => ({...state})
+
+export default connect(mapStateToProps)(Signup);

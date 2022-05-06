@@ -59,18 +59,16 @@ function AddNewPatient(props){
         event.preventDefault();
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds;
         let obj = {
             name: pName,
             age,
             email,
             gender,
-            addedAt : `${date}+ " " + ${time}`,
+            addedAt : date,
         }
         let data = allPatientsData.concat(obj);
         dispatch(updatePatientsData(data));
         props.history.push('/');
-        // console.log("clicked")
         
     }
             return (

@@ -1,28 +1,19 @@
 import React from 'react'; 
 import { connect } from 'react-redux';
-// import '../Stylesheets/header-styles/header.css';
 import {NavLink} from 'react-router-dom';
+import { updateLoginStatus } from '../store/action';
 
 function Header(props) {
-        let {isLoggedin} = props;
+        let {isLoggedin,dispatch} = props;
         return (
             <header className='container'>
                 <section className='header flex-between-center' >
                 <div>
                     <NavLink to='/'  className='logo' >Doctor's Portal</NavLink>
                 </div>
-                
-                {/* <label htmlFor='toggle' id='bars' >
-                <div className="hamburger-menu">
-                    <div className="bar top"></div>
-                    <div className="bar middle"></div>
-                    <div className="bar bottom"></div>
-                </div>
-                </label>
-                <input type='checkbox' id='toggle' /> */}
                 {
                     isLoggedin ?
-                    <AuthorisedUser isLoggedin={isLoggedin} />
+                    <AuthorisedUser dispatch={dispatch} />
                     
                     : 
                     <NoAuthorisedUser />
@@ -34,9 +25,14 @@ function Header(props) {
 }
 
 function AuthorisedUser(props){
+
+    const handleLogout = () => {
+        props.dispatch(updateLoginStatus(false))
+    }
+
     return(
         <div className='nav-menu' >
-            <button className='button-shrink padding' >Logout</button>
+            <button className='button-shrink padding'  onClick={handleLogout} >Logout</button>
         </div>
     )
 }

@@ -1,63 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import {BrowserRouter as Router } from 'react-router-dom';
-// import store from '../store/store';
 import AuthenticatedApp from './authenticatedapp';
 import Header from './header';
 import Loader from './loader';
 import UnAuthenticatedApp from './unauthenticatedapp';
 import { connect } from 'react-redux';
+import { updateLoginStatus, updatePatientsData } from '../store/action';
 
 function App(props){
-  console.log(props);
-  let {isLoggedin, isVerifying}= props;
-    // let [user,setUser] = useState(null);
-    // let [isLoggedin,setIsLoggedIn] = useState(false);
-    // let [isVerifying,setIsVerifying] = useState(true);
+  let [isVerifying,setIsVerifying] = useState(true);
+  let {isLoggedin, dispatch,allPatientsData}= props;
+
+    useEffect(() => {
+      if(allPatientsData){
+        localStorage.setItem("data", JSON.stringify(allPatientsData))
+      }
+    },[allPatientsData])
     
     useEffect(() => {
-        
-        // let key = localStorage[url.localStorageKey];
-        // let {userVerifyURL} = url;
-        // if(key){
-        //     fetch(userVerifyURL,{
-        //         method: 'GET',
-        //         headers:{
-        //             authorization : `Token ${key}`,
-        //         }
-        //     }).then(res => {
-        //         if(!res.ok){
-        //             return res.json().then(({errors}) => {
-        //                 return Promise.reject(errors);
-        //             });
-        //         }else{
-        //             return res.json()
-        //         }
-        //     })
-        //     .then(({user}) => {
-                
-        //         updateUser(user);
-        //     })
-        //     .catch(errors => console.log(errors))
-        // }else {
-        //     setIsVerifying(isVerifying = false);
-        // }
+      let status = JSON.parse(localStorage.getItem("status"));
+
+      if(!allPatientsData || allPatientsData.length === 0){
+        let data = JSON.parse(localStorage.getItem("data"));
+        dispatch(updatePatientsData(data));
+      }
+
+      setTimeout(() => {
+        dispatch(updateLoginStatus(status));
+        setIsVerifying(false);
+      },1000)
     },[])
-    // const updateUser = (user) => {
-    //     // this.setState({isLoggedin:true,user,isVerifying:false});
-    //     setIsLoggedIn(isLoggedin = true);
-    //     setUser(user);
-    //     setIsVerifying(isVerifying = false);
-    //     localStorage.setItem( url.localStorageKey, user.token);
-    // }
-    // const handleLogout = () => {
-    //     // console.log("logout")
-    //     localStorage.clear();
-    //     setIsLoggedIn(isLoggedin = false)
-    //     // this.setState({isLoggedin:false})
-    // }
-        // if(isVerifying){
-        //     return <Loader />
-        // }
+        if(isVerifying){
+            return <Loader />
+        }
         return (
           <>
             <Router>
