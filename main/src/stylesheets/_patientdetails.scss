@@ -1,0 +1,28 @@
+.max-width {
+    width: 80%;
+    margin: 96px auto;
+    padding: 36px;
+}
+
+.design {
+    font-size: 18px;
+    color: rgba(black,0.6);
+    margin-bottom: 24px;
+    span {
+        color: rgba(black,0.8);
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.back-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.m-p {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: blue;
+}
