@@ -66,7 +66,7 @@ function AddNewPatient(props){
             gender,
             addedAt : date,
         }
-        let data = allPatientsData.concat(obj);
+        let data = allPatientsData ? allPatientsData.concat(obj) : [obj];
         dispatch(updatePatientsData(data));
         props.history.push('/');
         
