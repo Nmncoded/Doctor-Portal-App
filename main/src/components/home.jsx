@@ -14,17 +14,19 @@ function Home(props){
     let [sortingBy,setSortingBy] = useState("");
     let [sortedData,setSortedData] = useState(null);
 
-    // useEffect(() => {
-    //     setTotalCount(sortedData ? sortedData.length : allPatientsData.length)
-    // },[sortedData])
-
     useEffect(() => {
         if(searchPatientByName && !sortingBy){
             setSortedData(allPatientsData.filter(data => data.name.includes(searchPatientByName)))
         }else if ( !searchPatientByName && sortingBy ) {
-            setSortedData(allPatientsData.sort((a,b) => a[sortingBy] - b[sortingBy]))  
+            if(sortingBy === "age"){
+                setSortedData(allPatientsData.sort((a,b) => a[sortingBy] - b[sortingBy]))
+            }
+            setSortedData(allPatientsData.sort( (a,b) => (a[sortingBy].toLowerCase() > b[sortingBy].toLowerCase()) ? 1 : ((b[sortingBy].toLowerCase() > a[sortingBy].toLowerCase()) ? -1 : 0) ))  
         }else if (searchPatientByName && sortingBy ){
-            setSortedData(allPatientsData.filter(data => data.name.includes(searchPatientByName)).sort((a,b) => a[sortingBy] - b[sortingBy]))
+            if(sortingBy === "age"){
+                setSortedData( allPatientsData.filter(data => data.name.includes(searchPatientByName)).sort((a,b) => a[sortingBy] - b[sortingBy])   )
+            }
+            setSortedData(allPatientsData.filter(data => data.name.includes(searchPatientByName)).sort( (a,b) => (a[sortingBy].toLowerCase() > b[sortingBy].toLowerCase()) ? 1 : ((b[sortingBy].toLowerCase() > a[sortingBy].toLowerCase()) ? -1 : 0) ))
         }else {
             setSortedData(null);
         }
@@ -35,10 +37,8 @@ function Home(props){
         let data = allPatientsData.filter((elm,index) => index !== id)
         dispatch(updatePatientsData(data))
     }
-    // console.log(sortedData);
 
     const handlePagination = (value) => {
-        console.log(value);
         setOffset( (value*limit) - limit)
     }
 
@@ -48,6 +48,7 @@ function Home(props){
             <button className="button-shrink padding" >+ Add new patient</button>
             </Link>
             {
+                
                 allPatientsData && allPatientsData.length > 0 ? 
                 <div className="main-patients-ui" >
                     <header className="patient-header flex-between-center" >
@@ -66,7 +67,10 @@ function Home(props){
                     </header>
                     <ul className="all-patients-list" >
                         {
-                            ( sortedData ? sortedData : allPatientsData ).filter((elm,index) => offset < index + 1 ).map((patient,index) => {
+                            sortedData && sortedData.length === 0 ? 
+                            <div className="errs" >No patient found !!!</div> :
+                            ( 
+                                sortedData && sortedData.length > 0 ? sortedData : allPatientsData ).filter((elm,index) => offset < index + 1 ).map((patient,index) => {
                                 if(index + 1 > limit)return;
                                 return (
     

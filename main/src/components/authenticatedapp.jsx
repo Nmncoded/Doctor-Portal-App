@@ -6,7 +6,6 @@ import PatientDetails from './patientdetails';
 
 
 function AuthenticatedApp(props){
-    console.log("authenticatedapp")
     return(
         <Switch>
             <Route path='/' exact >

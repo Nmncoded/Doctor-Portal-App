@@ -26,12 +26,6 @@ const reducer = (state = initialState, action) => {
         isLoggedin : action.payload,
       }
     }
-    // case LOGOUT: {
-    //   localStorage.clear();
-    //   return {
-    //     ...initialState
-    //   }
-    // }
     default: {
       return {...state};
     }
